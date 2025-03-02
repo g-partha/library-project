@@ -5,11 +5,14 @@ function addBook(bookTitle, bookAuthor, bookReadStatus) {
     myLibrary.push(newBook);
 }
 
-function AddNewBook(title, author, readStatus){
-    this.title = title;
-    this.author = author;
-    this.readStatus = readStatus;
-    this.changeReadStatus = function() {
+class AddNewBook {
+    constructor(title, author, readStatus) {
+        this.title = title;
+        this.author = author;
+        this.readStatus = readStatus;
+    }
+
+    changeReadStatus() {
         if(this.readStatus == "Read"){
             this.readStatus = "Reading";
         } else if(this.readStatus == "Reading") {
