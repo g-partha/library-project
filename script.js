@@ -66,31 +66,37 @@ function addNewBookForm(){
 
         const bookTitleFieldContainer = document.createElement("div");
         bookTitleFieldContainer.classList.toggle("book-title-field-container");
+        newBookForm.appendChild(bookTitleFieldContainer);
         const bookTitleField = document.createElement("input");
         bookTitleField.setAttribute("type", "text");
         bookTitleField.setAttribute("id", "book-title-field");
         bookTitleField.setAttribute("name", "title");
         bookTitleField.setAttribute("required", "");
+        bookTitleFieldContainer.appendChild(bookTitleField);
         const bookTitleLabel = document.createElement("label");
         bookTitleLabel.setAttribute("for", "book-title-field");
         bookTitleLabel.innerText = "Title";
-        newBookForm.appendChild(bookTitleFieldContainer);
         bookTitleFieldContainer.appendChild(bookTitleLabel);
-        bookTitleFieldContainer.appendChild(bookTitleField);
+        const bookTitleValidationError = document.createElement("p");
+        bookTitleValidationError.classList.add("error");
+        bookTitleFieldContainer.appendChild(bookTitleValidationError);
 
         const bookAuthorFieldContainer = document.createElement("div");
         bookAuthorFieldContainer.classList.toggle("book-author-field-container");
+        newBookForm.appendChild(bookAuthorFieldContainer);
         const bookAuthorField = document.createElement("input");
         bookAuthorField.setAttribute("type", "text");
         bookAuthorField.setAttribute("id", "book-author-field");
         bookAuthorField.setAttribute("name", "author");
         bookAuthorField.setAttribute("required", "");
+        bookAuthorFieldContainer.appendChild(bookAuthorField);
         const bookAuthorLabel = document.createElement("label");
         bookAuthorLabel.setAttribute("for", "book-author-field");
         bookAuthorLabel.innerText = "Author";
-        newBookForm.appendChild(bookAuthorFieldContainer);
         bookAuthorFieldContainer.appendChild(bookAuthorLabel);
-        bookAuthorFieldContainer.appendChild(bookAuthorField);
+        const bookAuthorValidationError = document.createElement("p");
+        bookAuthorValidationError.classList.add("error");
+        bookAuthorFieldContainer.appendChild(bookAuthorValidationError);
 
         const readStatusField = document.createElement("fieldset");
         readStatusField.classList.toggle("read-status-fieldset");
@@ -147,8 +153,7 @@ function addNewBookForm(){
         submitButton.innerText = "Submit";
         submitButton.addEventListener("click", event => {
             event.preventDefault();
-            console.log(!!bookTitleField.value);
-            if(!!bookTitleField.value && !!bookAuthorField.value){
+            if(validateForm()){
                 booksList.innerHTML = "";
                 const checkedReadStatus = document.querySelector("input:checked");
                 addBook(bookTitleField.value, bookAuthorField.value, checkedReadStatus.value);
@@ -167,8 +172,31 @@ function addNewBookForm(){
         formButtonsContainer.appendChild(submitButton);
         formButtonsContainer.appendChild(cancelButton);
         newBookForm.appendChild(formButtonsContainer);
+
+
+        function validateForm(){
+            if(bookTitleField.validity.valid){
+                bookTitleValidationError.textContent = "";
+            } else if(!bookTitleField.validity.valid){
+                bookTitleValidationError.textContent = bookTitleField.validationMessage;
+            }
+
+            if(bookAuthorField.validity.valid){
+                bookAuthorValidationError.textContent = "";
+            } else if(!bookAuthorField.validity.valid){
+                bookAuthorValidationError.textContent = bookAuthorField.validationMessage;
+            }
+
+            if(bookTitleField.validity.valid && bookAuthorField.validity.valid){
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 }
+
+
 
 function fillBooksList(){
     myLibrary.forEach((item, index, array) => {
